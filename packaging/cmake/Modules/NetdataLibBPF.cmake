@@ -59,13 +59,7 @@ function(netdata_bundle_libbpf)
     pkg_check_modules(ELF REQUIRED libelf)
     pkg_check_modules(ZLIB REQUIRED zlib)
 
-    set(_libbpf_lib_dir lib)
-
-    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-        set(_libbpf_lib_dir lib64)
-    endif()
-
-    set(_libbpf_library "${libbpf_SOURCE_DIR}/usr/${_libbpf_lib_dir}/libbpf.a")
+    set(_libbpf_library "${libbpf_SOURCE_DIR}/usr/lib/libbpf.a")
 
     ExternalProject_Add(
         libbpf
@@ -73,7 +67,7 @@ function(netdata_bundle_libbpf)
         GIT_TAG ${_libbpf_tag}
         SOURCE_DIR "${libbpf_SOURCE_DIR}"
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${MAKE_COMMAND} -C src CC=${CMAKE_C_COMPILER} BUILD_STATIC_ONLY=1 OBJDIR=build/ DESTDIR=../ install
+        BUILD_COMMAND ${MAKE_COMMAND} -C src CC=${CMAKE_C_COMPILER} BUILD_STATIC_ONLY=1 OBJDIR=build/ DESTDIR=../ LIBSUBDIR=lib install
         BUILD_IN_SOURCE 1
         BUILD_BYPRODUCTS "${_libbpf_library}"
         INSTALL_COMMAND ""
